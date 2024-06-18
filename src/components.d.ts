@@ -5,28 +5,39 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { MatchResults } from "@stencil-community/router";
 export namespace Components {
-    interface AppHome {
+    interface AddNewElementButton {
+        "activeFunction": (input:string|boolean) => void;
+        "buttonName": string;
+        "inputFunctionOne": string|boolean;
     }
-    interface AppProfile {
-        "match": MatchResults;
+    interface AppHome {
     }
     interface AppRoot {
     }
+    interface NodeComponent {
+        "inputs": string[];
+        "nodeId": string;
+        "output": string;
+    }
+    interface NodeEditorComponent {
+        "addReturnode": () => Promise<void>;
+    }
+    interface NodeElement {
+    }
 }
 declare global {
+    interface HTMLAddNewElementButtonElement extends Components.AddNewElementButton, HTMLStencilElement {
+    }
+    var HTMLAddNewElementButtonElement: {
+        prototype: HTMLAddNewElementButtonElement;
+        new (): HTMLAddNewElementButtonElement;
+    };
     interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {
     }
     var HTMLAppHomeElement: {
         prototype: HTMLAppHomeElement;
         new (): HTMLAppHomeElement;
-    };
-    interface HTMLAppProfileElement extends Components.AppProfile, HTMLStencilElement {
-    }
-    var HTMLAppProfileElement: {
-        prototype: HTMLAppProfileElement;
-        new (): HTMLAppProfileElement;
     };
     interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {
     }
@@ -34,33 +45,71 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
+    interface HTMLNodeComponentElement extends Components.NodeComponent, HTMLStencilElement {
+    }
+    var HTMLNodeComponentElement: {
+        prototype: HTMLNodeComponentElement;
+        new (): HTMLNodeComponentElement;
+    };
+    interface HTMLNodeEditorComponentElement extends Components.NodeEditorComponent, HTMLStencilElement {
+    }
+    var HTMLNodeEditorComponentElement: {
+        prototype: HTMLNodeEditorComponentElement;
+        new (): HTMLNodeEditorComponentElement;
+    };
+    interface HTMLNodeElementElement extends Components.NodeElement, HTMLStencilElement {
+    }
+    var HTMLNodeElementElement: {
+        prototype: HTMLNodeElementElement;
+        new (): HTMLNodeElementElement;
+    };
     interface HTMLElementTagNameMap {
+        "add-new-element-button": HTMLAddNewElementButtonElement;
         "app-home": HTMLAppHomeElement;
-        "app-profile": HTMLAppProfileElement;
         "app-root": HTMLAppRootElement;
+        "node-component": HTMLNodeComponentElement;
+        "node-editor-component": HTMLNodeEditorComponentElement;
+        "node-element": HTMLNodeElementElement;
     }
 }
 declare namespace LocalJSX {
-    interface AppHome {
+    interface AddNewElementButton {
+        "activeFunction"?: (input:string|boolean) => void;
+        "buttonName"?: string;
+        "inputFunctionOne"?: string|boolean;
     }
-    interface AppProfile {
-        "match"?: MatchResults;
+    interface AppHome {
     }
     interface AppRoot {
     }
+    interface NodeComponent {
+        "inputs"?: string[];
+        "nodeId"?: string;
+        "output"?: string;
+    }
+    interface NodeEditorComponent {
+    }
+    interface NodeElement {
+    }
     interface IntrinsicElements {
+        "add-new-element-button": AddNewElementButton;
         "app-home": AppHome;
-        "app-profile": AppProfile;
         "app-root": AppRoot;
+        "node-component": NodeComponent;
+        "node-editor-component": NodeEditorComponent;
+        "node-element": NodeElement;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "add-new-element-button": LocalJSX.AddNewElementButton & JSXBase.HTMLAttributes<HTMLAddNewElementButtonElement>;
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
-            "app-profile": LocalJSX.AppProfile & JSXBase.HTMLAttributes<HTMLAppProfileElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "node-component": LocalJSX.NodeComponent & JSXBase.HTMLAttributes<HTMLNodeComponentElement>;
+            "node-editor-component": LocalJSX.NodeEditorComponent & JSXBase.HTMLAttributes<HTMLNodeEditorComponentElement>;
+            "node-element": LocalJSX.NodeElement & JSXBase.HTMLAttributes<HTMLNodeElementElement>;
         }
     }
 }
