@@ -1,11 +1,13 @@
 /* node-component.css */
 
 .node {
+  position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   padding: 10px;
+  width: 150px; /* Adjust width as needed */
 }
 
 .node-header {
@@ -19,14 +21,28 @@
   width: 100%;
 }
 
-.inputs, .outputs {
+.inputs {
+  position: absolute;
+  left: -10px; /* Adjust to align with edge */
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.outputs {
+  position: absolute;
+  right: -10px; /* Adjust to align with edge */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .input-port, .output-port {
-  margin: 5px;
+  margin: 5px 0;
   cursor: pointer;
 }
 
