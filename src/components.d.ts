@@ -16,9 +16,11 @@ export namespace Components {
     interface AppRoot {
     }
     interface NodeComponent {
+        "inputClick": () => void;
         "inputs": string[];
         "nodeId": string;
         "output": string;
+        "outputClick": () => void;
     }
     interface NodeEditorComponent {
         "addReturnode": () => Promise<void>;
@@ -83,9 +85,11 @@ declare namespace LocalJSX {
     interface AppRoot {
     }
     interface NodeComponent {
+        "inputClick"?: () => void;
         "inputs"?: string[];
         "nodeId"?: string;
         "output"?: string;
+        "outputClick"?: () => void;
     }
     interface NodeEditorComponent {
     }
