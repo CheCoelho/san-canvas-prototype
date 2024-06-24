@@ -1,4 +1,5 @@
 import { Component, h, Prop, Element } from '@stencil/core';
+import { NodeComponentProps } from '../node-editor/node-editor-component';
 
 @Component({
   tag: 'node-component',
@@ -12,11 +13,12 @@ export class NodeComponent {
   @Prop() output: string; // Receive output as a prop
   @Prop() outputClick: (event: MouseEvent) => void;
   @Prop() inputClick: (event: MouseEvent) => void;
+  @Prop() nodeComponentProps: NodeComponentProps;
 
   render() {
     return (
-      <div class="node" id={this.nodeId}>
-        <div class="inputs">
+      <div class="node" id={this.nodeId} style={{ width: `${this.nodeComponentProps.nodeWidth}px`, height: `${this.nodeComponentProps.nodeHeight}px` }}>
+        <div class="inputs" style={{ top: `${this.nodeComponentProps.portOffsetY}px` }}>
           {this.inputs.map(input => (
             <div class="input-port" key={input} onClick={event => this.inputClick(event)}>
               <svg height="20" width="20">
@@ -30,7 +32,7 @@ export class NodeComponent {
           <button>scaffold</button>
           <button>upload</button>
         </div>
-        <div class="outputs">
+        <div class="outputs" style={{ top: `${this.nodeComponentProps.portOffsetY}px` }}>
           <div class="output-port" id={`output-${this.nodeId}`} onClick={event => this.outputClick(event)}>
             <svg height="20" width="20">
               <circle cx="10" cy="10" r="5" fill="red" />

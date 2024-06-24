@@ -1,5 +1,3 @@
-/* node-component.css */
-
 .node {
   position: relative;
   display: flex;
@@ -7,8 +5,7 @@
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   padding: 10px;
-  width: 350px; /* Adjust width as needed */
-  height: 150px;
+  border-radius: 5px;
 }
 
 .node-header {
@@ -30,8 +27,6 @@
 .inputs {
   position: absolute;
   left: -10px; /* Adjust to align with edge */
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -40,8 +35,6 @@
 .outputs {
   position: absolute;
   right: -10px; /* Adjust to align with edge */
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: flex-end;

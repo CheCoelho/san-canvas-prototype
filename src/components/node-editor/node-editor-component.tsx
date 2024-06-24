@@ -14,6 +14,13 @@ interface Connection {
   to: NodeData;
 }
 
+export interface NodeComponentProps {
+  nodeWidth: number;
+  nodeHeight: number;
+  portOffsetX: number;
+  portOffsetY: number;
+}
+
 @Component({
   tag: 'node-editor-component',
   styleUrl: 'node-editor-component.css',
@@ -27,6 +34,13 @@ export class NodeEditorComponent {
   @State() connections: Connection[] = [];
 
   svg: any;
+
+  nodeComponentProps: NodeComponentProps = {
+    nodeWidth: 350,
+    nodeHeight: 150,
+    portOffsetX: 10, // Offset from the node edge for the ports
+    portOffsetY: 75, // Vertical position for the ports (center of the node)
+  };
 
   componentDidLoad() {
     this.svg = d3
@@ -72,10 +86,10 @@ export class NodeEditorComponent {
       .attr('stroke', 'black')
       .attr('stroke-width', 2)
       .merge(lines)
-      .attr('x1', d => d.from.x + 100) // Adjust based on your node size and positioning
-      .attr('y1', d => d.from.y + 10)
-      .attr('x2', d => d.to.x + 10)
-      .attr('y2', d => d.to.y + 10);
+      .attr('x1', d => d.from.x + this.nodeComponentProps.nodeWidth - this.nodeComponentProps.portOffsetX) // Adjust based on your node size and positioning
+      .attr('y1', d => d.from.y + this.nodeComponentProps.portOffsetY)
+      .attr('x2', d => d.to.x + this.nodeComponentProps.portOffsetX)
+      .attr('y2', d => d.to.y + this.nodeComponentProps.portOffsetY);
 
     lines.exit().remove();
   }
@@ -97,6 +111,7 @@ export class NodeEditorComponent {
               inputClick={() => this.inputClick(node)}
               style={{ position: 'absolute', transform: `translate(${node.x}px, ${node.y}px)` }}
               ref={el => this.initializeDrag(node, el)}
+              nodeComponentProps={this.nodeComponentProps}
             />
           ))}
         </div>
