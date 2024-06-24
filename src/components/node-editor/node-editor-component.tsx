@@ -2,12 +2,12 @@ import { Component, h, State, Element, Host, Method } from '@stencil/core';
 import * as d3 from 'd3';
 import { v4 as uuidv4 } from 'uuid'; // Import uuid
 
-interface NodeData {
+export interface NodeData {
   id: string;
   x: number;
   y: number;
   inputs: string[]; // Array of identifiers for each input
-  output: string; // Identifier for the output
+  outputs: string[]; // Identifier for the output
   nodeName: string;
   functionalDescription: string;
   returnTypeDescription: string;
@@ -79,6 +79,19 @@ export class NodeEditorComponent {
   };
 
   addConnection(outputNode: NodeData, inputNode: NodeData) {
+    // Add outputNode's ID to inputNode's inputs
+    const inputNodeIndex = this.nodes.findIndex(node => node.id === inputNode.id);
+    if (inputNodeIndex !== -1) {
+      this.nodes[inputNodeIndex].inputs.push(outputNode.id);
+    }
+
+    // Add inputNode's ID to outputNode's outputs
+    const outputNodeIndex = this.nodes.findIndex(node => node.id === outputNode.id);
+    if (outputNodeIndex !== -1) {
+      this.nodes[outputNodeIndex].outputs.push(inputNode.id);
+    }
+
+    // Add the connection to the connections array
     this.connections = [...this.connections, { from: outputNode, to: inputNode }];
     this.updateConnections();
   }
@@ -113,8 +126,8 @@ export class NodeEditorComponent {
       id: uuidv4(), // Generate a unique ID
       x: 100 + (this.nodes.length % 10) * 120,
       y: 50 + Math.floor(this.nodes.length / 10) * 120,
-      inputs: ['input1', 'input2'],
-      output: 'output',
+      inputs: [],
+      outputs: [],
       nodeName: '',
       functionalDescription: '',
       returnTypeDescription: '',
@@ -171,7 +184,7 @@ export class NodeEditorComponent {
               key={node.id}
               nodeId={node.id}
               inputs={node.inputs}
-              output={node.output}
+              outputs={node.outputs}
               name={node.nodeName}
               functionalDescription={node.functionalDescription}
               returnTypeDescription={node.returnTypeDescription}

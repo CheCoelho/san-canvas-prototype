@@ -5,8 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { NodeComponentProps } from "./components/node-editor/node-editor-component";
-export { NodeComponentProps } from "./components/node-editor/node-editor-component";
+import { NodeComponentProps, NodeData } from "./components/node-editor/node-editor-component";
+export { NodeComponentProps, NodeData } from "./components/node-editor/node-editor-component";
 export namespace Components {
     interface AddNewElementButton {
         "activeFunction": (input:string|boolean) => void;
@@ -24,8 +24,8 @@ export namespace Components {
         "name": string;
         "nodeComponentProps": NodeComponentProps;
         "nodeId": string;
-        "output": string;
         "outputClick": (event: MouseEvent) => void;
+        "outputs": string[];
         "returnTypeDescription": string;
         "scaffold": (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => void;
         "scaffolded": boolean;
@@ -35,7 +35,7 @@ export namespace Components {
     interface NodeElement {
     }
     interface NodeOverview {
-        "node": any;
+        "node": NodeData;
     }
 }
 declare global {
@@ -108,8 +108,8 @@ declare namespace LocalJSX {
         "name"?: string;
         "nodeComponentProps"?: NodeComponentProps;
         "nodeId"?: string;
-        "output"?: string;
         "outputClick"?: (event: MouseEvent) => void;
+        "outputs"?: string[];
         "returnTypeDescription"?: string;
         "scaffold"?: (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => void;
         "scaffolded"?: boolean;
@@ -119,7 +119,7 @@ declare namespace LocalJSX {
     interface NodeElement {
     }
     interface NodeOverview {
-        "node"?: any;
+        "node"?: NodeData;
     }
     interface IntrinsicElements {
         "add-new-element-button": AddNewElementButton;

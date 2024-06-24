@@ -1,4 +1,5 @@
 import { Component, h, Prop } from '@stencil/core';
+import { NodeData } from '../node-editor/node-editor-component';
 
 @Component({
   tag: 'node-overview',
@@ -6,7 +7,7 @@ import { Component, h, Prop } from '@stencil/core';
   scoped: true,
 })
 export class NodeOverview {
-  @Prop() node: any;
+  @Prop() node: NodeData;
 
   render() {
     if (!this.node) {
@@ -19,12 +20,20 @@ export class NodeOverview {
         <p>
           <strong>ID:</strong> {this.node.id}
         </p>
-
+        <p>
+          <strong>name:</strong> {this.node.nodeName ? this.node.nodeName : <i>Unscaffolded Node</i>}
+        </p>
+        <p>
+          <strong>Functional Description:</strong> {this.node.functionalDescription ? this.node.functionalDescription : <i>No description</i>}
+        </p>
+        <p>
+          <strong>Return Type Description:</strong> {this.node.returnTypeDescription ? this.node.returnTypeDescription : <i>No description</i>}
+        </p>
         <p>
           <strong>Inputs:</strong> {this.node.inputs.join(', ')}
         </p>
         <p>
-          <strong>Output:</strong> {this.node.output}
+          <strong>Outputs:</strong> {this.node.outputs.join(', ')}
         </p>
         <div class="node-coordinates">
           <p class="coordinate-text">

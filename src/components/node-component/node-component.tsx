@@ -10,7 +10,7 @@ export class NodeComponent {
   @Element() el: HTMLElement;
   @Prop() nodeId: string;
   @Prop() inputs: string[]; // Receive inputs as a prop
-  @Prop() output: string; // Receive output as a prop
+  @Prop() outputs: string[]; // Receive output as a prop
   @Prop() name: string;
   @Prop() functionalDescription: string;
   @Prop() returnTypeDescription: string;
@@ -38,6 +38,11 @@ export class NodeComponent {
     return (
       <div class="node" id={this.nodeId} style={{ width: `${this.nodeComponentProps.nodeWidth}px`, height: `${this.nodeComponentProps.nodeHeight}px` }}>
         <div class="inputs" style={{ top: `${this.nodeComponentProps.portOffsetY}px` }}>
+          <div class="input-port" key={-1} onClick={event => this.inputClick(event)}>
+            <svg height="20" width="20">
+              <circle cx="10" cy="10" r="5" fill="blue" />
+            </svg>
+          </div>
           {this.inputs.map(input => (
             <div class="input-port" key={input} onClick={event => this.inputClick(event)}>
               <svg height="20" width="20">
