@@ -1,5 +1,6 @@
 import { Component, h, State, Element, Host, Method } from '@stencil/core';
 import * as d3 from 'd3';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid
 
 interface NodeData {
   id: string;
@@ -7,6 +8,10 @@ interface NodeData {
   y: number;
   inputs: string[]; // Array of identifiers for each input
   output: string; // Identifier for the output
+  nodeName: string;
+  functionalDescription: string;
+  returnTypeDescription: string;
+  scaffolded: boolean; // New property to track if the node is scaffolded
 }
 
 interface Connection {
@@ -37,8 +42,8 @@ export class NodeEditorComponent {
   svg: any;
 
   nodeComponentProps: NodeComponentProps = {
-    nodeWidth: 350,
-    nodeHeight: 150,
+    nodeWidth: 400,
+    nodeHeight: 350,
     portOffsetX: 10, // Offset from the node edge for the ports
     portOffsetY: 75, // Vertical position for the ports (center of the node)
   };
@@ -99,41 +104,21 @@ export class NodeEditorComponent {
     this.selectedNode = { ...node }; // Ensure the selected node state updates correctly
   }
 
-  render() {
-    return (
-      <Host>
-        <div class="toolbar">
-          <button onClick={() => this.addNode()}>Add Node</button>
-        </div>
-        <div class="nodes-container">
-          {this.nodes.map(node => (
-            <node-component
-              key={node.id}
-              nodeId={node.id}
-              inputs={node.inputs}
-              output={node.output}
-              outputClick={() => this.outPutClick(node)}
-              inputClick={() => this.inputClick(node)}
-              onClick={() => this.selectNode(node)}
-              style={{ position: 'absolute', transform: `translate(${node.x}px, ${node.y}px)` }}
-              ref={el => this.initializeDrag(node, el)}
-              nodeComponentProps={this.nodeComponentProps}
-            />
-          ))}
-        </div>
-        <node-overview node={this.selectedNode}></node-overview>
-      </Host>
-    );
-  }
+  handleScaffold = (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => {
+    this.nodes = this.nodes.map(node => (node.id === nodeId ? { ...node, nodeName, functionalDescription, returnTypeDescription, scaffolded: true } : node));
+  };
 
-  @Method()
-  async addNode() {
+  addNode() {
     const newNode: NodeData = {
-      id: `node_${this.nodes.length + 1}`,
+      id: uuidv4(), // Generate a unique ID
       x: 100 + (this.nodes.length % 10) * 120,
       y: 50 + Math.floor(this.nodes.length / 10) * 120,
       inputs: ['input1', 'input2'],
       output: 'output',
+      nodeName: '',
+      functionalDescription: '',
+      returnTypeDescription: '',
+      scaffolded: false, // Initially unscaffolded
     };
     this.nodes = [...this.nodes, newNode];
   }
@@ -171,6 +156,38 @@ export class NodeEditorComponent {
         .on('end', function () {
           d3.select(this).classed('active', false);
         }),
+    );
+  }
+
+  render() {
+    return (
+      <Host>
+        <div class="toolbar">
+          <button onClick={() => this.addNode()}>Add Node</button>
+        </div>
+        <div class="nodes-container">
+          {this.nodes.map(node => (
+            <node-component
+              key={node.id}
+              nodeId={node.id}
+              inputs={node.inputs}
+              output={node.output}
+              name={node.nodeName}
+              functionalDescription={node.functionalDescription}
+              returnTypeDescription={node.returnTypeDescription}
+              scaffolded={node.scaffolded}
+              scaffold={this.handleScaffold}
+              outputClick={() => this.outPutClick(node)}
+              inputClick={() => this.inputClick(node)}
+              onClick={() => this.selectNode(node)}
+              style={{ position: 'absolute', transform: `translate(${node.x}px, ${node.y}px)` }}
+              ref={el => this.initializeDrag(node, el)}
+              nodeComponentProps={this.nodeComponentProps}
+            />
+          ))}
+        </div>
+        <node-overview node={this.selectedNode}></node-overview>
+      </Host>
     );
   }
 }

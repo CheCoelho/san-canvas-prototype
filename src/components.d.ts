@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { NodeComponentProps } from "./components/node-editor/node-editor-component";
+export { NodeComponentProps } from "./components/node-editor/node-editor-component";
 export namespace Components {
     interface AddNewElementButton {
         "activeFunction": (input:string|boolean) => void;
@@ -16,16 +18,24 @@ export namespace Components {
     interface AppRoot {
     }
     interface NodeComponent {
+        "functionalDescription": string;
         "inputClick": (event: MouseEvent) => void;
         "inputs": string[];
+        "name": string;
+        "nodeComponentProps": NodeComponentProps;
         "nodeId": string;
         "output": string;
         "outputClick": (event: MouseEvent) => void;
+        "returnTypeDescription": string;
+        "scaffold": (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => void;
+        "scaffolded": boolean;
     }
     interface NodeEditorComponent {
-        "addNode": () => Promise<void>;
     }
     interface NodeElement {
+    }
+    interface NodeOverview {
+        "node": any;
     }
 }
 declare global {
@@ -65,6 +75,12 @@ declare global {
         prototype: HTMLNodeElementElement;
         new (): HTMLNodeElementElement;
     };
+    interface HTMLNodeOverviewElement extends Components.NodeOverview, HTMLStencilElement {
+    }
+    var HTMLNodeOverviewElement: {
+        prototype: HTMLNodeOverviewElement;
+        new (): HTMLNodeOverviewElement;
+    };
     interface HTMLElementTagNameMap {
         "add-new-element-button": HTMLAddNewElementButtonElement;
         "app-home": HTMLAppHomeElement;
@@ -72,6 +88,7 @@ declare global {
         "node-component": HTMLNodeComponentElement;
         "node-editor-component": HTMLNodeEditorComponentElement;
         "node-element": HTMLNodeElementElement;
+        "node-overview": HTMLNodeOverviewElement;
     }
 }
 declare namespace LocalJSX {
@@ -85,15 +102,24 @@ declare namespace LocalJSX {
     interface AppRoot {
     }
     interface NodeComponent {
+        "functionalDescription"?: string;
         "inputClick"?: (event: MouseEvent) => void;
         "inputs"?: string[];
+        "name"?: string;
+        "nodeComponentProps"?: NodeComponentProps;
         "nodeId"?: string;
         "output"?: string;
         "outputClick"?: (event: MouseEvent) => void;
+        "returnTypeDescription"?: string;
+        "scaffold"?: (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => void;
+        "scaffolded"?: boolean;
     }
     interface NodeEditorComponent {
     }
     interface NodeElement {
+    }
+    interface NodeOverview {
+        "node"?: any;
     }
     interface IntrinsicElements {
         "add-new-element-button": AddNewElementButton;
@@ -102,6 +128,7 @@ declare namespace LocalJSX {
         "node-component": NodeComponent;
         "node-editor-component": NodeEditorComponent;
         "node-element": NodeElement;
+        "node-overview": NodeOverview;
     }
 }
 export { LocalJSX as JSX };
@@ -114,6 +141,7 @@ declare module "@stencil/core" {
             "node-component": LocalJSX.NodeComponent & JSXBase.HTMLAttributes<HTMLNodeComponentElement>;
             "node-editor-component": LocalJSX.NodeEditorComponent & JSXBase.HTMLAttributes<HTMLNodeEditorComponentElement>;
             "node-element": LocalJSX.NodeElement & JSXBase.HTMLAttributes<HTMLNodeElementElement>;
+            "node-overview": LocalJSX.NodeOverview & JSXBase.HTMLAttributes<HTMLNodeOverviewElement>;
         }
     }
 }
