@@ -26,6 +26,10 @@ export class NodeComponent {
           ))}
         </div>
         <div class="node-header">{this.nodeId}</div>
+        <div class="button-group">
+          <button>scaffold</button>
+          <button>upload</button>
+        </div>
         <div class="outputs">
           <div class="output-port" id={`output-${this.nodeId}`} onClick={event => this.outputClick(event)}>
             <svg height="20" width="20">

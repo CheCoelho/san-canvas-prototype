@@ -9,6 +9,11 @@ interface NodeData {
   output: string; // Identifier for the output
 }
 
+interface Connection {
+  from: NodeData;
+  to: NodeData;
+}
+
 @Component({
   tag: 'node-editor-component',
   styleUrl: 'node-editor-component.css',
@@ -17,38 +22,69 @@ interface NodeData {
 export class NodeEditorComponent {
   @Element() el: HTMLElement;
   @State() nodes: NodeData[] = [];
-  @State() inputClicked: boolean = false;
-  @State() outPutClicked: boolean = false;
+  @State() selectedOutputNode: NodeData | null = null;
+  @State() selectedInputNode: NodeData | null = null;
+  @State() connections: Connection[] = [];
 
   svg: any;
 
   componentDidLoad() {
-    this.svg = d3.select(this.el).append('svg').attr('width', '100%').attr('height', '100%').style('top', '0').style('left', '0');
+    this.svg = d3
+      .select(this.el)
+      .append('svg')
+      .attr('width', 2800) // Fixed width for canvas
+      .attr('height', 1600) // Fixed height for canvas
+      .style('top', '0')
+      .style('left', '0');
   }
 
-  outPutClick = () => {
-    if (this.inputClicked) {
-      //join nodes
+  outPutClick = (node: NodeData) => {
+    if (this.selectedInputNode) {
+      this.addConnection(node, this.selectedInputNode);
+      this.selectedInputNode = null;
     } else {
-      this.outPutClicked = true;
+      this.selectedOutputNode = node;
     }
-    console.log('Output clicked');
+    console.log('Output clicked', node.id);
   };
 
-  inputClick = () => {
-    if (this.outPutClicked) {
-      // join nodes
+  inputClick = (node: NodeData) => {
+    if (this.selectedOutputNode) {
+      this.addConnection(this.selectedOutputNode, node);
+      this.selectedOutputNode = null;
     } else {
-      this.inputClicked = true;
+      this.selectedInputNode = node;
     }
-    console.log('Input clicked');
+    console.log('Input clicked', node.id);
   };
+
+  addConnection(outputNode: NodeData, inputNode: NodeData) {
+    this.connections = [...this.connections, { from: outputNode, to: inputNode }];
+    this.updateConnections();
+  }
+
+  updateConnections() {
+    const lines = this.svg.selectAll('line').data(this.connections);
+
+    lines
+      .enter()
+      .append('line')
+      .attr('stroke', 'black')
+      .attr('stroke-width', 2)
+      .merge(lines)
+      .attr('x1', d => d.from.x + 100) // Adjust based on your node size and positioning
+      .attr('y1', d => d.from.y + 10)
+      .attr('x2', d => d.to.x + 10)
+      .attr('y2', d => d.to.y + 10);
+
+    lines.exit().remove();
+  }
 
   render() {
     return (
       <Host>
         <div class="toolbar">
-          <button onClick={() => this.addReturnode()}>Add Node</button>
+          <button onClick={() => this.addNode()}>Add Node</button>
         </div>
         <div class="nodes-container">
           {this.nodes.map(node => (
@@ -57,8 +93,8 @@ export class NodeEditorComponent {
               nodeId={node.id}
               inputs={node.inputs}
               output={node.output}
-              outputClick={() => this.outPutClick()}
-              inputClick={() => this.inputClick()}
+              outputClick={() => this.outPutClick(node)}
+              inputClick={() => this.inputClick(node)}
               style={{ position: 'absolute', transform: `translate(${node.x}px, ${node.y}px)` }}
               ref={el => this.initializeDrag(node, el)}
             />
@@ -69,7 +105,7 @@ export class NodeEditorComponent {
   }
 
   @Method()
-  async addReturnode() {
+  async addNode() {
     const newNode: NodeData = {
       id: `node_${this.nodes.length + 1}`,
       x: 100 + (this.nodes.length % 10) * 120,
@@ -95,12 +131,13 @@ export class NodeEditorComponent {
         .on('start', function () {
           d3.select(this).raise().classed('active', true);
         })
-        .on('drag', function (event) {
+        .on('drag', event => {
           const dx = event.x;
           const dy = event.y;
-          d3.select(this).style('transform', `translate(${dx}px, ${dy}px)`);
+          d3.select(nodeElement).style('transform', `translate(${dx}px, ${dy}px)`);
           node.x = dx;
           node.y = dy;
+          this.updateConnections();
         })
         .on('end', function () {
           d3.select(this).classed('active', false);

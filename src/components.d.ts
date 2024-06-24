@@ -23,7 +23,7 @@ export namespace Components {
         "outputClick": (event: MouseEvent) => void;
     }
     interface NodeEditorComponent {
-        "addReturnode": () => Promise<void>;
+        "addNode": () => Promise<void>;
     }
     interface NodeElement {
     }
