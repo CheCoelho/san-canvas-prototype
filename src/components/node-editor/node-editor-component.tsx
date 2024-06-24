@@ -29,6 +29,7 @@ export interface NodeComponentProps {
 export class NodeEditorComponent {
   @Element() el: HTMLElement;
   @State() nodes: NodeData[] = [];
+  @State() selectedNode: NodeData | null = null;
   @State() selectedOutputNode: NodeData | null = null;
   @State() selectedInputNode: NodeData | null = null;
   @State() connections: Connection[] = [];
@@ -94,6 +95,10 @@ export class NodeEditorComponent {
     lines.exit().remove();
   }
 
+  selectNode(node: NodeData) {
+    this.selectedNode = { ...node }; // Ensure the selected node state updates correctly
+  }
+
   render() {
     return (
       <Host>
@@ -109,12 +114,14 @@ export class NodeEditorComponent {
               output={node.output}
               outputClick={() => this.outPutClick(node)}
               inputClick={() => this.inputClick(node)}
+              onClick={() => this.selectNode(node)}
               style={{ position: 'absolute', transform: `translate(${node.x}px, ${node.y}px)` }}
               ref={el => this.initializeDrag(node, el)}
               nodeComponentProps={this.nodeComponentProps}
             />
           ))}
         </div>
+        <node-overview node={this.selectedNode}></node-overview>
       </Host>
     );
   }
@@ -140,6 +147,12 @@ export class NodeEditorComponent {
       return;
     }
 
+    const updateSelectedNode = () => {
+      if (this.selectedNode && this.selectedNode.id === node.id) {
+        this.selectedNode = { ...node };
+      }
+    };
+
     d3Node.datum(node).call(
       d3
         .drag()
@@ -153,6 +166,7 @@ export class NodeEditorComponent {
           node.x = dx;
           node.y = dy;
           this.updateConnections();
+          updateSelectedNode();
         })
         .on('end', function () {
           d3.select(this).classed('active', false);
