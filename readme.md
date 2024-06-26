@@ -2,6 +2,10 @@
 
 This is a frontend for scaffolding flask apps that run a GPT generated task as nodes on a canvas. Each app has an api with a defined endpoint that runs a GPT generated task. The nodes can be piped into each other as functional chains.
 
+## Backend 
+
+repo: https://github.com/CheCoelho/san-node-applet-scaffolder
+
 ## Getting Started
 
 To start a new project using Stencil, clone this repo to a new directory:
