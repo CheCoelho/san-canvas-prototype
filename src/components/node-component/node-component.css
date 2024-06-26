@@ -8,10 +8,11 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%; /* Ensure the node container takes full width */
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+  min-height: 100px; /* Minimum height for the node */
 }
 
 .node-header {
-  flex-grow: 1;
   text-align: left;
   font-weight: bold;
   font-size: 16px;

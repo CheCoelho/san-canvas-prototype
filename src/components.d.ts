@@ -19,12 +19,13 @@ export namespace Components {
     }
     interface NodeComponent {
         "functionalDescription": string;
-        "inputClick": (event: MouseEvent) => void;
+        "inputClick": (nodeId: string) => void;
         "inputs": string[];
         "name": string;
         "nodeComponentProps": NodeComponentProps;
         "nodeId": string;
-        "outputClick": (event: MouseEvent) => void;
+        "nodes": NodeData[];
+        "outputClick": (nodeId: string) => void;
         "outputs": string[];
         "returnTypeDescription": string;
         "scaffold": (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => void;
@@ -103,12 +104,13 @@ declare namespace LocalJSX {
     }
     interface NodeComponent {
         "functionalDescription"?: string;
-        "inputClick"?: (event: MouseEvent) => void;
+        "inputClick"?: (nodeId: string) => void;
         "inputs"?: string[];
         "name"?: string;
         "nodeComponentProps"?: NodeComponentProps;
         "nodeId"?: string;
-        "outputClick"?: (event: MouseEvent) => void;
+        "nodes"?: NodeData[];
+        "outputClick"?: (nodeId: string) => void;
         "outputs"?: string[];
         "returnTypeDescription"?: string;
         "scaffold"?: (nodeId: string, nodeName: string, functionalDescription: string, returnTypeDescription: string) => void;
